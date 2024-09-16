@@ -7,11 +7,23 @@ clc; clear all; close all
 %                                                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 addpath(genpath('./QSMART_toolbox_v1.0'));
+addpath('/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/ants-2.5.3/bin/');
+addpath(genpath('/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/frangi_filter_version2a'));
+addpath(genpath('/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/curvatures'));
+addpath(genpath('/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/STISuite_V3.0'));
+addpath(genpath('/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/NIfTI_20140122'));
+addpath(genpath('/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/QSM-master/phase_unwrapping'));
+addpath(genpath('/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/QSM-master/coil_combination'));
+addpath(genpath('/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/QSM-master/Misc'));
+addpath('/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/STISuite_V3.0/STISuite_V3.0/Core_Functions_P')
 
+global antspath fslpath outpath;
+antspath = "/home/unimelb.edu.au/ashishsingh/Documents/Work/installs/ants-2.5.3/bin/";
+fslpath = "/home/unimelb.edu.au/ashishsingh/fsl/bin/"
 %%% Defining data paths and string IDs%%%
   
-datapath_mag='';
-datapath_pha='';
+datapath_mag='/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/Data/neutral/1.10.1/1.10.1.432/1.10.1.432.1.1/1.10.1.432.1.1.53/dicom_series';
+datapath_pha='/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/Data/neutral/1.10.1/1.10.1.432/1.10.1.432.1.1/1.10.1.432.1.1.54/dicom_series';
 out_path='./QSMART_out/';
 % Path to utility code
 qsm_params.mexEig3volume=which('eig3volume.c');
@@ -74,6 +86,9 @@ qsm_params.smth_thres_percentile = 100;                % iLSQR-smoothing high-su
 qsm_params.save_raw_data=0;
 
 % QSMART 
+start_time = tic
 QSMART(datapath_mag,datapath_pha,qsm_params,out_path);    
+elapsed_time = toc(start_time)
+fprintf('Time required in HH:MM:SS by QSMART : %s', duration([0,0,elapsed_time]))
     
 

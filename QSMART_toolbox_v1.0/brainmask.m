@@ -1,5 +1,6 @@
 function mask=brainmask(mag_all,params)
 
+global antspath fslpath outpath;
 vox = params.iminfo.resolution;
 
 disp('---generating initial brain mask---');
@@ -8,10 +9,27 @@ mag1_sos = sqrt(sum(mag_all(:,:,:,1,:).^2,5));
 nii = make_nii(mag1_sos,vox); %%makes NIfTI image
 save_nii(nii,'mag1_sos.nii');
 %%bias field correction
-unix('module load ants/1.9.v4; N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii');
+%unix('module load ants/1.9.v4; N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii');
+%disp('antspath: ',ants)
+% n4biascorrectioncmd = antspath + "N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii";
+% x = ['n4biascorrectioncmd: ', n4biascorrectioncmd]
+% disp(x)
+% pause(5);
+status = system(antspath + "N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii");
+%system("N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii");
+fprintf('status: %d\n', status)
+if status == 0
+    disp('N4BiasFieldCorrection completed successfully.')
+elseif status ~= 0
+    disp('N4BiasFieldCorrection completed successfully.')
+end
+
+
+disp("N4BiasFieldCorrection done")
 %%mask
 %(1) brain mask
-unix('module load fsl/5.0.9; bet2 mag1_sos_n4.nii BET -f 0.2 -m');
+%unix('module load fsl/5.0.9; bet2 mag1_sos_n4.nii BET -f 0.2 -m');
+system(fslpath + "bet2 mag1_sos_n4.nii BET -f 0.2 -m");
 % set a lower threshold for postmortem
 % unix('bet2 mag1_sos.nii BET -f 0.1 -m');
 unix('gunzip -f BET.nii.gz');

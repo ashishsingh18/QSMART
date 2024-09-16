@@ -12,11 +12,11 @@ nSL = length(ph_list);
 
 % get the sequence parameters
 dicom_info = dicominfo([ph_list(end).folder,filesep,ph_list(end).name]);%%%filesep is the file separator for the current directory ('/' ex.) %% gets the info of the last dicom
-NumberOfEchoes = dicom_info.EchoNumber; 
+NumberOfEchoes = dicom_info.EchoNumbers; 
 
 for i = 1:nSL/NumberOfEchoes:nSL % read in TEs
     dicom_info = dicominfo([ph_list(i).folder,filesep,ph_list(i).name]);
-    TE(dicom_info.EchoNumber) = dicom_info.EchoTime*1e-3; %% store TE s in msec
+    TE(dicom_info.EchoNumbers) = dicom_info.EchoTime*1e-3; %% store TE s in msec
 end
 dicom_info.echo_times=TE;
 dicom_info.resolution = [dicom_info.PixelSpacing(1), dicom_info.PixelSpacing(2), dicom_info.SliceThickness];%%voxel dimensions

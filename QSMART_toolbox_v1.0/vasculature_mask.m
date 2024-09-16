@@ -1,5 +1,6 @@
 function vasc_only= vasculature_mask(mag_corr,mask,params)
 
+global antspath fslpath outpath;
 vox=params.iminfo.resolution;
 mexEig3volume=params.mexEig3volume;
 imsize=size(mag_corr);
@@ -9,7 +10,14 @@ AvgEcho=mean(mag_corr,4);
 %
 nii = make_nii(AvgEcho,vox); %%makes NIfTI image
 save_nii(nii,'AvgEcho.nii');
-unix('module load ants/1.9.v4; N4BiasFieldCorrection -i AvgEcho.nii -o AvgEcho_n4.nii');
+%unix('module load ants/1.9.v4; N4BiasFieldCorrection -i AvgEcho.nii -o AvgEcho_n4.nii');
+status = system(antspath + "N4BiasFieldCorrection -i AvgEcho.nii -o AvgEcho_n4.nii");
+fprintf('status: %d\n', status)
+if status == 0
+    disp('N4BiasFieldCorrection completed successfully.')
+elseif status ~= 0
+    disp('N4BiasFieldCorrection completed successfully.')
+end
 nii = load_nii('AvgEcho_n4.nii');
 AvgEcho_n4=nii.img;
 
