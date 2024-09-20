@@ -16,10 +16,12 @@ ph_nii_out = "/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Py
 mkdir(mag_nii_out);
 mkdir(ph_nii_out);
 
+% convert mag dicom to nii
 terminate(pyenv)
 pyenv(ExecutionMode="OutOfProcess")
 pyrunfile("/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/read_dicoms.py", i=path_mag,o=mag_nii_out);
 
+% convert ph dicom to nii
 terminate(pyenv)
 pyenv(ExecutionMode="OutOfProcess")
 pyrunfile("/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/read_dicoms.py", i=path_pha,o=ph_nii_out);

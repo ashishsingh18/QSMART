@@ -1,4 +1,6 @@
 import os,sys
+import SimpleITK as sitk
+import numpy as np
 
 #print('Hello from Conda Python')
 # print('python version: ', sys.version)
@@ -11,7 +13,11 @@ def convert_dicom_to_nifti(input_dcm_dir,output_dcm_dir):
     else:
         print("dcm2niix succeeded")
 
-convert_dicom_to_nifti(i,o)
+def read_info_from_dicom_header(input_dcm_dir):
+    
+
+
+convert_dicom_to_nifti(idir,odir)
 
 # def add(a,b):
 #     c = a+b
