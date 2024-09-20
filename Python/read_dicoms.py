@@ -1,3 +1,4 @@
+#read_dicoms.py
 import os,sys
 import SimpleITK as sitk
 import numpy as np
@@ -49,8 +50,8 @@ def read_info_from_dicom_header(input_dcm_dir):
     dicom_info.z_prjs = [Xz, Yz, Zz]
     print('dicom_info: ', dicom_info)
 
-convert_dicom_to_nifti(idir,odir)
-read_info_from_dicom_header(idir)
+#convert_dicom_to_nifti(idir=None,odir=None)
+#read_info_from_dicom_header(idir)
 
 # def add(a,b):
 #     c = a+b

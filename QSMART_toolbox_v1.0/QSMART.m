@@ -11,21 +11,27 @@ cd(path_out); %goes to the new created folder
 
 % convert mag dicom into nii and save them in output folder.
 % use dcm2nnix from python for dicom to nii conversion
-mag_nii_out = "/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/mag_nii_out";
-ph_nii_out = "/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/ph_nii_out";
+mag_nii_out = "/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python-out/mag_nii_out";
+ph_nii_out = "/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python-out/ph_nii_out";
 mkdir(mag_nii_out);
 mkdir(ph_nii_out);
 
 % convert mag dicom to nii
 terminate(pyenv)
 pyenv(ExecutionMode="OutOfProcess")
-pyrunfile("/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/read_dicoms.py", i=path_mag,o=mag_nii_out);
+%pyrunfile("/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/read_dicoms.py", idir=path_mag,odir=mag_nii_out);
+%py.importlib.reload('read_dicoms')
+if count(py.sys.path,'/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python') == 0
+    insert(py.sys.path,int32(0),'/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python');
+end
+py.importlib.import_module('read_dicoms')
+py.read_dicoms.convert_dicom_to_nifti(input_dcm_dir=path_mag,output_dcm_dir=mag_nii_out)
 
 % convert ph dicom to nii
-terminate(pyenv)
-pyenv(ExecutionMode="OutOfProcess")
-pyrunfile("/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/read_dicoms.py", i=path_pha,o=ph_nii_out);
-
+%terminate(pyenv)
+%pyenv(ExecutionMode="OutOfProcess")
+%pyrunfile("/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/read_dicoms.py", idir=path_pha,odir=ph_nii_out);
+py.read_dicoms.convert_dicom_to_nifti(input_dcm_dir=path_pha,output_dcm_dir=ph_nii_out)
 return;
 
 % initial quick brain mask
