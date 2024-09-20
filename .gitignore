@@ -3,3 +3,5 @@
 **/ext/
 QSMART_out/
 *.asv
+*.json
+*.nii

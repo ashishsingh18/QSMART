@@ -7,7 +7,24 @@ mkdir(path_out); %creates the folder
 cd(path_out); %goes to the new created folder
 
 % read in DICOMs of both uncombined magnitude and raw unfiltered phase images
-[mag_all,ph_all,params.iminfo]= readComplexDicoms(path_mag,path_pha);
+%[mag_all,ph_all,params.iminfo]= readComplexDicoms(path_mag,path_pha);
+
+% convert mag dicom into nii and save them in output folder.
+% use dcm2nnix from python for dicom to nii conversion
+mag_nii_out = "/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/mag_nii_out";
+ph_nii_out = "/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/ph_nii_out";
+mkdir(mag_nii_out);
+mkdir(ph_nii_out);
+
+terminate(pyenv)
+pyenv(ExecutionMode="OutOfProcess")
+pyrunfile("/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/read_dicoms.py", i=path_mag,o=mag_nii_out);
+
+terminate(pyenv)
+pyenv(ExecutionMode="OutOfProcess")
+pyrunfile("/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/read_dicoms.py", i=path_pha,o=ph_nii_out);
+
+return;
 
 % initial quick brain mask
 mask=brainmask(mag_all,params);
