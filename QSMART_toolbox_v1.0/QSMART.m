@@ -7,7 +7,13 @@ mkdir(path_out); %creates the folder
 cd(path_out); %goes to the new created folder
 
 % read in DICOMs of both uncombined magnitude and raw unfiltered phase images
-%[mag_all,ph_all,params.iminfo]= readComplexDicoms(path_mag,path_pha);
+% [mag_all,ph_all,params.iminfo]= readComplexDicoms(path_mag,path_pha);
+% fprintf('dicom_info.echo_times : %s\n', params.iminfo.echo_times)
+% fprintf('dicom_info.resolution : %s\n', params.iminfo.resolution)
+% fprintf('dicom_info.z_prjs : %s\n', params.iminfo.z_prjs)
+% fprintf('dicom_info : %s\n', params.iminfo)
+
+% return;
 
 % convert mag dicom into nii and save them in output folder.
 % use dcm2nnix from python for dicom to nii conversion
@@ -32,6 +38,37 @@ py.read_dicoms.convert_dicom_to_nifti(input_dcm_dir=path_mag,output_dcm_dir=mag_
 %pyenv(ExecutionMode="OutOfProcess")
 %pyrunfile("/home/unimelb.edu.au/ashishsingh/Documents/Work/qsm/QSMART-fork/Python/read_dicoms.py", idir=path_pha,odir=ph_nii_out);
 py.read_dicoms.convert_dicom_to_nifti(input_dcm_dir=path_pha,output_dcm_dir=ph_nii_out)
+
+retVal = py.read_dicoms.read_info_from_dicom_header(input_dcm_dir=path_pha)
+
+% Extracting echo_times
+echo_times = [str2double(char(retVal{'echo_times'}{'1 '})), ...
+              str2double(char(retVal{'echo_times'}{'2 '})), ...
+              str2double(char(retVal{'echo_times'}{'3 '})), ...
+              str2double(char(retVal{'echo_times'}{'4 '}))];
+
+% Extracting resolution
+resolution = cell2mat(cell(retVal{'resolution'}));
+
+% Extracting z_prjs
+z_prjs = cell2mat(cell(retVal{'z_prjs'}));
+
+% Display the extracted values
+disp('Echo Times:');
+disp(echo_times);
+
+disp('Resolution:');
+disp(resolution);
+
+disp('Z Projections:');
+disp(z_prjs);
+
+params.iminfo.echo_times = echo_times;
+params.iminfo.resolution = resolution;
+params.iminfo.z_prjs = z_prjs;
+
+% disp('params.iminfo:');
+% disp(params.iminfo);
 return;
 
 % initial quick brain mask
